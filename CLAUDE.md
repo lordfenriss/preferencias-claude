@@ -1,8 +1,9 @@
 # Preferências gerais
 
-**Versão 1.12 · 02/10/2026**
+**Versão 1.13 · 07/10/2026**
 
 <!-- Registros antigos (comentário de bloco: o Claude Code não o carrega no contexto).
+v1.12 → v1.13: nova seção Q (Google Sheets, Apps Script e Workspace).
 v1.11 → v1.12: sai uma menção desatualizada na seção O.
 v1.10 → v1.11: registros de mudanças passam todos para este comentário (enxugamento de 02/10/2026).
 v1.9 → v1.10: D1 e I1 deixam de pedir o que agora é automático — a confirmação de ação destrutiva vem de `permissions.ask` e a busca do remoto na abertura vem de um hook `SessionStart`, ambos em `~/.claude/settings.json`.
@@ -99,3 +100,11 @@ Texto anterior completo: ~/.claude/backups/enxugamento-2026-10-02/CLAUDE_global_
 
 - O1. Todo painel ou janela flutuante que uma extensão ou script meu injeta numa página deve ser arrastável pelo cabeçalho (o botão de fechar não inicia o arrasto), com a posição lembrada entre recargas e sempre dentro da área visível da janela. Vale para painéis novos e para os que já existem, sem eu precisar pedir de novo.
 - O2. Em automação, use script e seletor fixos para o que é sempre a mesma mecânica e reserve a análise por modelo para o que varia caso a caso; comece perguntando qual das duas coisas a etapa é. Entregue por um caminho que se atualize sozinho (extensão recarregável), sem exigir que eu opere o Git, e suba a versão a cada mudança para a correção chegar.
+
+## Q. Google Sheets, Apps Script e Workspace
+
+- Q1. Antes de propor fórmula, recurso ou código de Google Sheets, Apps Script ou API do Workspace, consulte a documentação atual em vez de confiar no treinamento.
+- Q2. Fontes, nesta ordem: Developer Knowledge MCP do Google (developers.google.com: Apps Script, Sheets API); Central de Ajuda dos Editores de Documentos (support.google.com/docs) para funções e recursos da planilha, como tabelas e referências estruturadas; sem MCP, busca na web restrita a essas fontes oficiais.
+- Q3. Planilhas com localidade Brasil: fórmula gravada por script com vírgula pode não ser interpretada; grave com a localidade temporariamente em en_US ou use a sintaxe local.
+- Q4. Nomes em LET/LAMBDA não podem parecer endereço de célula (m1, dia1, ab12).
+- Q5. Marque com nível de confiança (P2) o que não puder ser confirmado na documentação.
