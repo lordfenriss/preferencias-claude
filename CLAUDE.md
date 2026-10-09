@@ -1,8 +1,12 @@
 # Preferências gerais
 
-**Versão 1.12 · 02/10/2026**
+**Versão 1.16 · 09/10/2026**
 
 <!-- Registros antigos (comentário de bloco: o Claude Code não o carrega no contexto).
+v1.15 → v1.16: nova seção R (política de bloqueios e limitações: desbloqueio proativo).
+v1.14 → v1.15: nova seção Q (Q1 limpeza de protótipo antes da entrega final; Q2 autorização para alterar este arquivo quando pedido explicitamente).
+v1.13 → v1.14: nova regra B4 (aviso de sessão longa e oferta de /encerrar).
+v1.12 → v1.13: nova regra G5 (documentos guardam o fato e a decisão, nunca a troca que levou a ela).
 v1.11 → v1.12: sai uma menção desatualizada na seção O.
 v1.10 → v1.11: registros de mudanças passam todos para este comentário (enxugamento de 02/10/2026).
 v1.9 → v1.10: D1 e I1 deixam de pedir o que agora é automático — a confirmação de ação destrutiva vem de `permissions.ask` e a busca do remoto na abertura vem de um hook `SessionStart`, ambos em `~/.claude/settings.json`.
@@ -35,6 +39,7 @@ Texto anterior completo: ~/.claude/backups/enxugamento-2026-10-02/CLAUDE_global_
 - B1. Ao rascunhar uma solicitação com padrão de consumo alto (muita rolagem ou captura, execução iterativa longa, muitas chamadas de ferramenta), alerte antes de enviar e sugira alternativa mais barata.
 - B2. PDFs. Antes de anexar, avise que custam tokens de imagem e de texto por página, normalmente mais que .txt ou .md. Se for majoritariamente texto, sugira converter antes. Se for denso ou escaneado, sugira OCR ou divisão em partes menores.
 - B3. Cache de contexto. O app já pede confirmação ao trocar de modelo ou de esforço com o cache quente; não repita esse aviso. Alerte só sobre o que ele não cobre: editar mensagem antiga e inserir ou remover arquivo ou imagem no meio da conversa. Indique o custo extra com marcador P2 e a alternativa mais barata (anexar ao final, resumir em vez de recomeçar).
+- B4. Ao sugerir comando, skill ou tarefa nova numa sessão já longa (contexto acima de uns 150 mil tokens, ou depois de muitas trocas), diga para rodar numa sessão nova e ofereça o bastão (/encerrar).
 
 ## C. Modelo em tarefas longas e agentes
 
@@ -68,6 +73,7 @@ Texto anterior completo: ~/.claude/backups/enxugamento-2026-10-02/CLAUDE_global_
 - G2. Todo artefato em texto ou código traz versão e data no topo; a partir da segunda versão, também registro de mudanças.
 - G3. Respostas e artefatos se leem sozinhos. Descreva por extenso o que a coisa é, com código de referência entre parênteses no fim da frase, em vez de citar arquivo só pelo número. Na dúvida entre repetir três linhas e mandar procurar em outro lugar, repita.
 - G4. Tarefa que eu executo fora do chat vem pronta: passos numerados (um ato por passo, com o rótulo do botão e o caminho de tela), texto completo para colar, exemplo já criado, resultado esperado e o que fazer se der errado. Nunca descreva um comando que eu teria de redigir nem me peça para inventar dado de teste.
+- G5. Documento, registro, log, comentário de código, mensagem de commit e resposta guardam o **fato e a decisão final**, nunca a troca que levou a eles. Não registre correção, mal-entendido, esclarecimento nem quem cedeu ("apesar do que foi dito", "foi esclarecido", "contra a recomendação", "o executor preferiu X a Y"). Registre o que vale agora, e a decisão com data e autor só quando importar para rastrear a mudança. Exceção: descoberta de pesquisa do Claude (o que se testou, mediu ou leu), com fonte e data. Ao revisar ou enxugar documentação, apague esse tipo de troca onde estiver.
 
 ## H. Edição e testes
 
@@ -99,3 +105,17 @@ Texto anterior completo: ~/.claude/backups/enxugamento-2026-10-02/CLAUDE_global_
 
 - O1. Todo painel ou janela flutuante que uma extensão ou script meu injeta numa página deve ser arrastável pelo cabeçalho (o botão de fechar não inicia o arrasto), com a posição lembrada entre recargas e sempre dentro da área visível da janela. Vale para painéis novos e para os que já existem, sem eu precisar pedir de novo.
 - O2. Em automação, use script e seletor fixos para o que é sempre a mesma mecânica e reserve a análise por modelo para o que varia caso a caso; comece perguntando qual das duas coisas a etapa é. Entregue por um caminho que se atualize sozinho (extensão recarregável), sem exigir que eu opere o Git, e suba a versão a cada mudança para a correção chegar.
+
+## Q. Entrega final e manutenção deste arquivo
+
+- Q1. Limpeza de protótipo. Antes de entregar a versão final de qualquer produto (código, planilha, documento, prompt), varra e remova tudo o que foi acrescentado só para implantar, testar ou migrar o protótipo. Peças temporárias nascem com mecanismo de saída e entram numa lista de remoção; a entrega final informa o que foi removido. Dúvida sobre escopo: pergunte em caixa de opções.
+- Q2. Autorização. Você pode alterar meu CLAUDE.md global sempre que eu pedir explicitamente.
+
+## R. Bloqueios e limitações: desbloqueio proativo
+
+- R1. Pare no ponto. Ao esbarrar em bloqueio, limitação, restrição ou erro que impeça algo que pedi, pare ali: não contorne em silêncio nem deixe o aviso para o final.
+- R2. Desbloqueie sozinho o que for seu. Se o bloqueio se resolve mudando configuração interna (do Claude Code, do Google Workspace, do sistema do MPF etc.) sem outro agente nem computer use, faça agora, sem pedir autorização para o que você já pode mudar.
+- R3. Se não conseguir sozinho, ou houver mais de um caminho, ofereça caixa de opções (E1): **desbloquear permanentemente** (muda a configuração de verdade); **desbloquear só por agora** (vale só nesta sessão); **não dá para desbloquear** (com o motivo técnico real: limite do Claude, exigiria outro agente, computer use etc.).
+- R4. Sempre explique: (a) o que foi bloqueado, de forma específica (ação, ferramenta, permissão); (b) por quê, com a origem provável e o lugar exato ("skill desativada em [lugar]", "restrição em [Configurações > caminho]", "falta permissão em [lugar]", "a ferramenta não suporta porque [razão técnica]"); (c) as opções de desbloqueio: se você muda sozinho, "Vou mudar [configuração] agora"; se depende de mim, "Para desbloquear, você pode..." com os botões; se é impossível, "Não dá para desbloquear porque [razão técnica real]".
+- R5. Não diga "não consigo" se consegue. Só afirme impossibilidade quando for tecnicamente impossível; dizer que não muda e depois forçar a mudança destrói a confiança.
+- R6. Paralelize. Havendo outras tarefas enquanto aguarda minha autorização, continue nelas e informe todos os bloqueios encontrados.
