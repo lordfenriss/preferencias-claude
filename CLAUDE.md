@@ -1,8 +1,9 @@
 # Preferências gerais
 
-**Versão 1.17 · 09/10/2026**
+**Versão 1.18 · 09/10/2026**
 
 <!-- Registros antigos (comentário de bloco: o Claude Code não o carrega no contexto).
+v1.17 → v1.18: seção S reduzida às regras que L1, L6 e P2 não cobrem.
 v1.16 → v1.17: nova seção S (Google Sheets, Apps Script e Workspace).
 v1.15 → v1.16: nova seção R (política de bloqueios e limitações: desbloqueio proativo).
 v1.14 → v1.15: nova seção Q (Q1 limpeza de protótipo antes da entrega final; Q2 autorização para alterar este arquivo quando pedido explicitamente).
@@ -123,8 +124,6 @@ Texto anterior completo: ~/.claude/backups/enxugamento-2026-10-02/CLAUDE_global_
 
 ## S. Google Sheets, Apps Script e Workspace
 
-- S1. Antes de propor fórmula, recurso ou código de Google Sheets, Apps Script ou API do Workspace, consulte a documentação atual em vez de confiar no treinamento.
-- S2. Fontes, nesta ordem: Developer Knowledge MCP do Google (developers.google.com: Apps Script, Sheets API); Central de Ajuda dos Editores de Documentos (support.google.com/docs) para funções e recursos da planilha, como tabelas e referências estruturadas; sem MCP, busca na web restrita a essas fontes oficiais.
-- S3. Planilhas com localidade Brasil: fórmula gravada por script com vírgula pode não ser interpretada; grave com a localidade temporariamente em en_US ou use a sintaxe local.
-- S4. Nomes em LET/LAMBDA não podem parecer endereço de célula (m1, dia1, ab12).
-- S5. Marque com nível de confiança (P2) o que não puder ser confirmado na documentação.
+- S1. Complementa L1 e L6. Para fórmula, recurso ou código de Google Sheets, Apps Script ou API do Workspace, fontes nesta ordem: Developer Knowledge MCP do Google (developers.google.com: Apps Script, Sheets API); Central de Ajuda dos Editores de Documentos (support.google.com/docs) para funções e recursos da planilha, como tabelas e referências estruturadas; sem MCP, busca na web restrita a essas fontes oficiais.
+- S2. Planilhas com localidade Brasil: fórmula gravada por script com vírgula pode não ser interpretada; grave com a localidade temporariamente em en_US ou use a sintaxe local.
+- S3. Nomes em LET/LAMBDA não podem parecer endereço de célula (m1, dia1, ab12).
