@@ -1,8 +1,9 @@
 # Preferências gerais
 
-**Versão 1.16 · 09/10/2026**
+**Versão 1.17 · 09/10/2026**
 
 <!-- Registros antigos (comentário de bloco: o Claude Code não o carrega no contexto).
+v1.16 → v1.17: nova seção S (Google Sheets, Apps Script e Workspace).
 v1.15 → v1.16: nova seção R (política de bloqueios e limitações: desbloqueio proativo).
 v1.14 → v1.15: nova seção Q (Q1 limpeza de protótipo antes da entrega final; Q2 autorização para alterar este arquivo quando pedido explicitamente).
 v1.13 → v1.14: nova regra B4 (aviso de sessão longa e oferta de /encerrar).
@@ -119,3 +120,11 @@ Texto anterior completo: ~/.claude/backups/enxugamento-2026-10-02/CLAUDE_global_
 - R4. Sempre explique: (a) o que foi bloqueado, de forma específica (ação, ferramenta, permissão); (b) por quê, com a origem provável e o lugar exato ("skill desativada em [lugar]", "restrição em [Configurações > caminho]", "falta permissão em [lugar]", "a ferramenta não suporta porque [razão técnica]"); (c) as opções de desbloqueio: se você muda sozinho, "Vou mudar [configuração] agora"; se depende de mim, "Para desbloquear, você pode..." com os botões; se é impossível, "Não dá para desbloquear porque [razão técnica real]".
 - R5. Não diga "não consigo" se consegue. Só afirme impossibilidade quando for tecnicamente impossível; dizer que não muda e depois forçar a mudança destrói a confiança.
 - R6. Paralelize. Havendo outras tarefas enquanto aguarda minha autorização, continue nelas e informe todos os bloqueios encontrados.
+
+## S. Google Sheets, Apps Script e Workspace
+
+- S1. Antes de propor fórmula, recurso ou código de Google Sheets, Apps Script ou API do Workspace, consulte a documentação atual em vez de confiar no treinamento.
+- S2. Fontes, nesta ordem: Developer Knowledge MCP do Google (developers.google.com: Apps Script, Sheets API); Central de Ajuda dos Editores de Documentos (support.google.com/docs) para funções e recursos da planilha, como tabelas e referências estruturadas; sem MCP, busca na web restrita a essas fontes oficiais.
+- S3. Planilhas com localidade Brasil: fórmula gravada por script com vírgula pode não ser interpretada; grave com a localidade temporariamente em en_US ou use a sintaxe local.
+- S4. Nomes em LET/LAMBDA não podem parecer endereço de célula (m1, dia1, ab12).
+- S5. Marque com nível de confiança (P2) o que não puder ser confirmado na documentação.
