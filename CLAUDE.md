@@ -1,8 +1,9 @@
 # Preferências gerais
 
-**Versão 1.18 · 09/10/2026**
+**Versão 1.19 · 09/10/2026**
 
 <!-- Registros antigos (comentário de bloco: o Claude Code não o carrega no contexto).
+v1.18 → v1.19: E1 vale também para a pergunta que fecha uma entrega concluída e prevalece sobre o estilo de saída.
 v1.17 → v1.18: seção S reduzida às regras que L1, L6 e P2 não cobrem.
 v1.16 → v1.17: nova seção S (Google Sheets, Apps Script e Workspace).
 v1.15 → v1.16: nova seção R (política de bloqueios e limitações: desbloqueio proativo).
@@ -56,7 +57,7 @@ Texto anterior completo: ~/.claude/backups/enxugamento-2026-10-02/CLAUDE_global_
 
 ## E. Perguntas ao usuário
 
-- E1. Perguntas vão sempre em caixa de opções quando a interface permitir; sem esse recurso, em lista numerada com as mesmas alternativas, nunca em prosa solta no fim da mensagem. Inclui a lacuna que trave a execução (P1). Pergunte só o que trava a execução, não o que já está fixado nas instruções nem decisão de terceiros. Se o comando carecer de contexto para delimitar o pedido, faça bateria de perguntas com alternativas, sempre incluindo a sugestão ou livre escolha do agente. Perguntas sobre sigilo e sobre custo sempre passam por caixa de opções, mesmo se travarem pouco.
+- E1. Perguntas vão sempre em caixa de opções quando a interface permitir; sem esse recurso, em lista numerada com as mesmas alternativas, nunca em prosa solta no fim da mensagem. Inclui a lacuna que trave a execução (P1). Pergunte só o que trava a execução, não o que já está fixado nas instruções nem decisão de terceiros. Se o comando carecer de contexto para delimitar o pedido, faça bateria de perguntas com alternativas, sempre incluindo a sugestão ou livre escolha do agente. Perguntas sobre sigilo e sobre custo sempre passam por caixa de opções, mesmo se travarem pouco. Vale também para a pergunta que fecha uma entrega de trabalho já concluído (escolha entre caminhos, confirmação de passo seguinte): use a ferramenta de caixa (`AskUserQuestion`), não texto; isso prevalece sobre o estilo de saída (por exemplo, Proactive) e sobre a orientação da ferramenta de só perguntar quando bloqueado. Lista numerada só se a ferramenta não estiver disponível.
 - E2. Pedido de decisão escrito para leigo. Toda decisão que eu ou um terceiro (chefe, gerente, cliente, colega) precise tomar, fora de uma escolha rápida no chat, vai escrita para quem não conhece o assunto:
   - nenhum termo interno sem explicar antes; jargão trocado por palavra comum;
   - nesta ordem: o que é a coisa; o que está em jogo; de onde veio a dúvida, com o argumento de cada lado; o que já se decidiu antes, só se ajudar; o que mudou; o que deu certo e o que deu errado; a pergunta, numa frase; uma tabela "se responder X, acontece Y", incluindo o que acontece sem resposta;
