@@ -1,8 +1,9 @@
 # Preferências gerais
 
-**Versão 1.21 · 13/10/2026**
+**Versão 1.22 · 13/10/2026**
 
 <!-- Registros antigos (comentário de bloco: o Claude Code não o carrega no contexto).
+v1.21 → v1.22: nova regra E5 (caixas interativas usam a forma mais recente disponível; AskUserQuestion é o padrão).
 v1.20 → v1.21: nova regra E4 (aviso recorrente ganha baixa por "Ciente" ou "Sugerir solução" em caixa interativa).
 v1.19 → v1.20: nova regra E3 (roteiro de conferência do usuário vai em caixa interativa, com campo de observação e envio único).
 v1.18 → v1.19: E1 vale também para a pergunta que fecha uma entrega concluída e prevalece sobre o estilo de saída.
@@ -75,6 +76,7 @@ Texto anterior completo: ~/.claude/backups/enxugamento-2026-10-02/CLAUDE_global_
   - "Ciente": dá baixa; não repita o aviso no restante da sessão nem o inclua no bastão de /encerrar, salvo se a situação mudar;
   - "Sugerir solução": o campo "Outro" recebe meu comentário sobre o aviso; trate-o como pedido de proposta de solução, na própria resposta seguinte.
   - Avisos sem baixa seguem sendo repetidos só quando relevantes. Junte os avisos do mesmo turno na mesma caixa (até quatro perguntas; o excedente vira lista no bastão).
+- E5. Forma da interface interativa. Onde E1, E3 e E4 dizem "caixa interativa" (`AskUserQuestion`), use a forma interativa mais recente e atualizada que minha conta e a sessão oferecerem (por exemplo, painel ou dashboard, se disponível); `AskUserQuestion` é o padrão enquanto não houver forma melhor. Ao ouvir falar de recurso novo de interface, confira o material oficial recente (L1/L6), com fonte e data, antes de afirmar que existe ou que minha conta o tem.
 
 ## F. Perfil do usuário
 
