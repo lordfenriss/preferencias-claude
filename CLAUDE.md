@@ -1,8 +1,9 @@
 # Preferências gerais
 
-**Versão 1.22 · 13/10/2026**
+**Versão 1.23 · 13/10/2026**
 
 <!-- Registros antigos (comentário de bloco: o Claude Code não o carrega no contexto).
+v1.22 → v1.23: nova regra S4 (ponte para o guia de atualização sobre o Google Planilhas).
 v1.21 → v1.22: nova regra E5 (caixas interativas usam a forma mais recente disponível; AskUserQuestion é o padrão).
 v1.20 → v1.21: nova regra E4 (aviso recorrente ganha baixa por "Ciente" ou "Sugerir solução" em caixa interativa).
 v1.19 → v1.20: nova regra E3 (roteiro de conferência do usuário vai em caixa interativa, com campo de observação e envio único).
@@ -141,3 +142,4 @@ Texto anterior completo: ~/.claude/backups/enxugamento-2026-10-02/CLAUDE_global_
 - S1. Complementa L1 e L6. Para fórmula, recurso ou código de Google Sheets, Apps Script ou API do Workspace, fontes nesta ordem: Developer Knowledge MCP do Google (developers.google.com: Apps Script, Sheets API); Central de Ajuda dos Editores de Documentos (support.google.com/docs) para funções e recursos da planilha, como tabelas e referências estruturadas; sem MCP, busca na web restrita a essas fontes oficiais.
 - S2. Planilhas com localidade Brasil: fórmula gravada por script com vírgula pode não ser interpretada; grave com a localidade temporariamente em en_US ou use a sintaxe local.
 - S3. Nomes em LET/LAMBDA não podem parecer endereço de célula (m1, dia1, ab12).
+- S4. Sempre que eu pedir trabalho com planilhas Google (fórmula, recurso, estrutura, script ligado), leia antes de propor o guia de atualização sobre o Google Planilhas, que corrige o que o treinamento tende a errar (tabelas, chips, notificações condicionais, funções ausentes, limites). Local: repositório `afastamentos-quorum`, arquivo `docs/guia-google-sheets-atualizacao.md` (os temas ficam em `docs/guia-google-sheets/`). Se o arquivo não existir no ambiente, diga isso e aplique S1.
