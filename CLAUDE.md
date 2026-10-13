@@ -1,8 +1,9 @@
 # Preferências gerais
 
-**Versão 1.19 · 09/10/2026**
+**Versão 1.20 · 13/10/2026**
 
 <!-- Registros antigos (comentário de bloco: o Claude Code não o carrega no contexto).
+v1.19 → v1.20: nova regra E3 (roteiro de conferência do usuário vai em caixa interativa, com campo de observação e envio único).
 v1.18 → v1.19: E1 vale também para a pergunta que fecha uma entrega concluída e prevalece sobre o estilo de saída.
 v1.17 → v1.18: seção S reduzida às regras que L1, L6 e P2 não cobrem.
 v1.16 → v1.17: nova seção S (Google Sheets, Apps Script e Workspace).
@@ -64,6 +65,11 @@ Texto anterior completo: ~/.claude/backups/enxugamento-2026-10-02/CLAUDE_global_
   - sem linha do tempo, sem códigos e sem caminho de arquivo no corpo; detalhe técnico, se houver, num rodapé que diga que não é preciso lê-lo;
   - curto: de uma a duas páginas;
   - recomendação, quando couber, separada e marcada como tal.
+- E3. Roteiro de conferência. Sempre que sobrar algo para eu executar e conferir fora do chat (recarregar extensão, testar no uso real, validar resultado), não entregue só a lista em texto: escreva os passos de preparo conforme G4 e, logo depois, abra uma caixa interativa (`AskUserQuestion`) para eu devolver tudo de uma vez:
+  - uma pergunta por checagem, com as opções "Passou", "Falhou" e "Não testei" (a pergunta diz o que olhar e o resultado esperado); o campo "Outro" de cada pergunta serve para eu descrever o que vi;
+  - a última pergunta é "Observações", com as opções "Nada a acrescentar" e "Tenho observação" (o campo "Outro" recebe o texto livre sobre o que notei fora do roteiro);
+  - a caixa aceita até quatro perguntas: com mais de três checagens, agrupe-as em perguntas de múltipla escolha ("marque as que passaram"), ou divida em caixas sucessivas, nunca em lista de texto;
+  - ao receber a resposta, trate "Falhou" e as observações como pendência a investigar na mesma sessão; "Não testei" fica registrado como pendente, sem reprovar.
 
 ## F. Perfil do usuário
 
