@@ -1,8 +1,9 @@
 # Preferências gerais
 
-**Versão 1.20 · 13/10/2026**
+**Versão 1.21 · 13/10/2026**
 
 <!-- Registros antigos (comentário de bloco: o Claude Code não o carrega no contexto).
+v1.20 → v1.21: nova regra E4 (aviso recorrente ganha baixa por "Ciente" ou "Sugerir solução" em caixa interativa).
 v1.19 → v1.20: nova regra E3 (roteiro de conferência do usuário vai em caixa interativa, com campo de observação e envio único).
 v1.18 → v1.19: E1 vale também para a pergunta que fecha uma entrega concluída e prevalece sobre o estilo de saída.
 v1.17 → v1.18: seção S reduzida às regras que L1, L6 e P2 não cobrem.
@@ -70,6 +71,10 @@ Texto anterior completo: ~/.claude/backups/enxugamento-2026-10-02/CLAUDE_global_
   - a última pergunta é "Observações", com as opções "Nada a acrescentar" e "Tenho observação" (o campo "Outro" recebe o texto livre sobre o que notei fora do roteiro);
   - a caixa aceita até quatro perguntas: com mais de três checagens, agrupe-as em perguntas de múltipla escolha ("marque as que passaram"), ou divida em caixas sucessivas, nunca em lista de texto;
   - ao receber a resposta, trate "Falhou" e as observações como pendência a investigar na mesma sessão; "Não testei" fica registrado como pendente, sem reprovar.
+- E4. Aviso com baixa. Todo aviso que eu precise só tomar conhecimento (limite, atraso, efeito colateral, pendência que não trava nada) e que você repetiria nas interações seguintes vai acompanhado de caixa interativa (`AskUserQuestion`), uma pergunta por aviso, com as opções:
+  - "Ciente": dá baixa; não repita o aviso no restante da sessão nem o inclua no bastão de /encerrar, salvo se a situação mudar;
+  - "Sugerir solução": o campo "Outro" recebe meu comentário sobre o aviso; trate-o como pedido de proposta de solução, na própria resposta seguinte.
+  - Avisos sem baixa seguem sendo repetidos só quando relevantes. Junte os avisos do mesmo turno na mesma caixa (até quatro perguntas; o excedente vira lista no bastão).
 
 ## F. Perfil do usuário
 
