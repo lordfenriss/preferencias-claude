@@ -1,8 +1,9 @@
 # Preferências gerais
 
-**Versão 1.26 · 15/10/2026**
+**Versão 1.27 · 16/10/2026**
 
 <!-- Registros antigos (comentário de bloco: o Claude Code não o carrega no contexto).
+v1.26 → v1.27: E4 passa a elemento interativo ao lado da frase; R1 mostra a falha de forma interativa sem interromper e pula a etapa bloqueada até eu reagir.
 v1.25 → v1.26: E1, E3, E6 e V1 privilegiam elementos interativos na conversa; B3, D1, E5, F2, H1, I1, L6 e Q2 saem; ajustes de texto em A1, B2, C1, D4, E2, F1, G1–G4, J1, L1, N1 e O1.
 v1.24 → v1.25: L1 pesquisa antes de responder sobre o Claude quando a informação for de 15 dias ou mais, e nunca nega recurso sem pesquisar; D5 passa a ser objetivo de saída (sem comentários sobre AGENTS.md, salvo risco ao input); E6 aceita recurso novo sem esperar confirmação oficial; R1 trata o classificador do modo automático (pergunta antes; se negado, não repete por outro caminho).
 v1.23 → v1.24: nova regra E6 (nada de roteiro, auditoria ou relatório por nome de arquivo e número de passo; documento que pede minha decisão vai em artefato ou painel interativo, decisão por clique, texto só se eu quiser); E3 aponta para E6.
@@ -70,10 +71,7 @@ Texto anterior completo: ~/.claude/backups/enxugamento-2026-10-02/CLAUDE_global_
   - recomendação separada e marcada como tal.
   - Decisões que tratam só do assunto da conversa cabem em poucas linhas. Texto de mais de uma página para decisão é prejudicial.
 - E3. Roteiro de conferência. Quando o andamento depende de input ou feedback do usuário (algo para testar ou conferir), o roteiro fica dentro da conversa, em elementos interativos (E1), ou em artefato interativo (E6) quando o esforço for maior. Cada checagem tem as opções Passou, Falhou e Não testei, com o que olhar e o resultado esperado. Use o máximo de elementos intuitivos e eficientes. Falhas e observações viram pendência a investigar na mesma sessão; "Não testei" fica registrado como pendente.
-- E4. Aviso com baixa. Todo aviso que eu precise só tomar conhecimento (limite, atraso, efeito colateral, pendência que não trava nada) e que você repetiria nas interações seguintes vai acompanhado de caixa interativa (`AskUserQuestion`), uma pergunta por aviso, com as opções:
-  - "Ciente": dá baixa; não repita o aviso no restante da sessão nem o inclua no bastão de /encerrar, salvo se a situação mudar;
-  - "Sugerir solução": o campo "Outro" recebe meu comentário sobre o aviso; trate-o como pedido de proposta de solução, na própria resposta seguinte.
-  - Avisos sem baixa seguem sendo repetidos só quando relevantes. Junte os avisos do mesmo turno na mesma caixa (até quatro perguntas; o excedente vira lista no bastão).
+- E4. Aviso com baixa. Todo aviso que eu só precise tomar conhecimento, ou autorização simples, vai acompanhado de elemento interativo ao lado da frase para resposta ágil (botão, tick, check ou a visualização apropriada à demanda). "Ciente" dá baixa: não repita o aviso no restante da sessão, salvo se a situação mudar. Junte os avisos do mesmo turno no mesmo elemento.
 - E6. Arquivos gerados são registro para uso do Claude. O que precisa de atenção, conferência, decisão ou ação do usuário é apresentado dentro da conversa, em artefato interativo ou elemento interativo. Se nenhum estiver disponível ou for apropriado, use caixa de pergunta. Nunca mande o usuário a uma seção de arquivo. Cada item traz o que olhar, onde clicar, o resultado esperado e o que fazer se falhar (G4).
 
 ## F. Perfil do usuário
@@ -120,7 +118,7 @@ Texto anterior completo: ~/.claude/backups/enxugamento-2026-10-02/CLAUDE_global_
 
 ## R. Bloqueios e limitações: desbloqueio proativo
 
-- R1. Ao esbarrar em bloqueio, limitação, restrição ou erro que impeça algo que pedi, não contorne em silêncio e não deixe o aviso para o final. Se o bloqueio vier do classificador do modo automático, pergunte antes, em caixa (E1), quando a ação provavelmente cair nele. Se ele negar, não repita a ação por outro caminho que produza o mesmo resultado; faça o resto do que não depende dela e pergunte, em caixa, se você autoriza.
+- R1. Ao esbarrar em bloqueio, limitação, restrição ou erro que impeça algo que pedi, não contorne em silêncio. Mostre a falha ou negação dentro da conversa, de forma interativa que chame a atenção sem interromper, convidando-me a ajudar a viabilizar o desbloqueio e sugerindo o que verificar, antes de tentar outra solução ou ferramenta. Enquanto eu não reagir ao alerta, pule a etapa bloqueada e atenda outra tarefa da demanda.
 - R2. Desbloqueie sozinho o que for seu. Se o bloqueio se resolve mudando configuração interna (do Claude Code, do Google Workspace, do sistema do MPF etc.) sem outro agente nem computer use, faça agora, sem pedir autorização para o que você já pode mudar.
 - R3. Se não conseguir sozinho, ou houver mais de um caminho, ofereça caixa de opções (E1): **desbloquear permanentemente** (muda a configuração de verdade); **desbloquear só por agora** (vale só nesta sessão); **não dá para desbloquear** (com o motivo técnico real: limite do Claude, exigiria outro agente, computer use etc.).
 - R4. Sempre explique: (a) o que foi bloqueado, de forma específica (ação, ferramenta, permissão); (b) por quê, com a origem provável e o lugar exato ("skill desativada em [lugar]", "restrição em [Configurações > caminho]", "falta permissão em [lugar]", "a ferramenta não suporta porque [razão técnica]"); (c) as opções de desbloqueio: se você muda sozinho, "Vou mudar [configuração] agora"; se depende de mim, "Para desbloquear, você pode..." com os botões; se é impossível, "Não dá para desbloquear porque [razão técnica real]".
