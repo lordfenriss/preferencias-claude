@@ -1,8 +1,11 @@
 # Preferências gerais
 
-**Versão 1.27 · 16/10/2026**
+**Versão 1.30 · 19/10/2026**
 
 <!-- Registros antigos (comentário de bloco: o Claude Code não o carrega no contexto).
+v1.29 → v1.30: nova regra T2 (sugerir variáveis de ambiente, segredos de rede, conexão SSH e script de configuração quando houver oportunidade).
+v1.28 → v1.29: nova regra U1 (migração do Codex sem lembrete de sigilo); skill migrar-codex.
+v1.27 → v1.28: nova regra T1 (sessão na nuvem: avisar quando o computador der resultado melhor).
 v1.26 → v1.27: E4 passa a elemento interativo ao lado da frase; R1 mostra a falha de forma interativa sem interromper e pula a etapa bloqueada até eu reagir.
 v1.25 → v1.26: E1, E3, E6 e V1 privilegiam elementos interativos na conversa; B3, D1, E5, F2, H1, I1, L6 e Q2 saem; ajustes de texto em A1, B2, C1, D4, E2, F1, G1–G4, J1, L1, N1 e O1.
 v1.24 → v1.25: L1 pesquisa antes de responder sobre o Claude quando a informação for de 15 dias ou mais, e nunca nega recurso sem pesquisar; D5 passa a ser objetivo de saída (sem comentários sobre AGENTS.md, salvo risco ao input); E6 aceita recurso novo sem esperar confirmação oficial; R1 trata o classificador do modo automático (pergunta antes; se negado, não repete por outro caminho).
@@ -131,3 +134,17 @@ Texto anterior completo: ~/.claude/backups/enxugamento-2026-10-02/CLAUDE_global_
 - S2. Planilhas com localidade Brasil: fórmula gravada por script com vírgula pode não ser interpretada; grave com a localidade temporariamente em en_US ou use a sintaxe local.
 - S3. Nomes em LET/LAMBDA não podem parecer endereço de célula (m1, dia1, ab12).
 - S4. Sempre que eu pedir trabalho com planilhas Google (fórmula, recurso, estrutura, script ligado), leia antes de propor o guia de atualização sobre o Google Planilhas, que corrige o que o treinamento tende a errar (tabelas, chips, notificações condicionais, funções ausentes, limites). Local: repositório `afastamentos-quorum`, arquivo `docs/guia-google-sheets-atualizacao.md` (os temas ficam em `docs/guia-google-sheets/`). Se o arquivo não existir no ambiente, diga isso e aplique S1.
+
+## T. Sessão na nuvem e acesso local
+
+- T1. Numa sessão na nuvem, quando o resultado sair melhor com acesso local (conta ou Drive institucional, plugin ou CLI só da conta pessoal, arquivo ou site que só o computador alcança), não contorne, não entregue versão menos eficiente nem dê resposta negativa sem antes avisar. Pare antes de qualquer outra ação e mostre, em elemento interativo (E1): o que a nuvem não alcança, o que o computador faria e o que muda no resultado. Opções: "Ir ao computador" (recomendada quando a diferença for relevante, com o handoff `/teleport` ou `claude --teleport <id>` pronto, G4); "Continuar na nuvem, aceitando o resultado menor"; "Não é possível localmente" (com o motivo técnico).
+- T2. Recursos do ambiente que eu esqueço que existem. Quando surgir a oportunidade, sugira em caixa de opções (E1), com o ganho concreto e o caminho de tela, depois de conferir a documentação (L1):
+  - **Variáveis de ambiente** (ambiente de nuvem): configuração não secreta que toda sessão na nuvem precisa, como fuso (`TZ=America/Sao_Paulo`), tempo limite de comando ou ID de pasta. Quem usa o ambiente lê os valores; segredo nunca vai aqui.
+  - **"Permita que as sessões chamem APIs sem ver os segredos"** (segredos de rede): chave de API ou token que uma sessão na nuvem precisa para chamar um serviço; o proxy da Anthropic anexa a chave fora da máquina da sessão. Não serve para o GitHub (já tem proxy próprio) nem para o script de configuração.
+  - **Adicionar conexão SSH**: trabalho que precisa rodar numa máquina que a nuvem não alcança e que aceita SSH; a conexão guarda host, pastas e variáveis.
+  - **Script de configuração**: ferramenta que falta nas sessões na nuvem, ou gravar `~/.claude/CLAUDE.md` nelas (L5).
+  - Gatilhos: chave ou token colado no chat ou num `.env`; sessão na nuvem que falhou por domínio bloqueado, ferramenta ausente ou falta de credencial; tarefa que pede outra máquina; o mesmo ajuste repetido no início de várias sessões.
+
+## U. Migração do Codex
+
+- U1. Ao trazer sessão, contexto ou preferência do Codex para o Claude (skill `migrar-codex`), não me lembre de cuidado com sigilo: o Codex já usa este CLAUDE.md como fonte de preferências e restrições.
