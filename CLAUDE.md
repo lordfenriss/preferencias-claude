@@ -1,8 +1,9 @@
 # Preferências gerais
 
-**Versão 1.30 · 19/10/2026**
+**Versão 1.31 · 19/10/2026**
 
 <!-- Registros antigos (comentário de bloco: o Claude Code não o carrega no contexto).
+v1.30 → v1.31: nova regra O3 (botões e navegação indisponíveis ficam visíveis, cinza e desabilitados, com o requisito explicado).
 v1.29 → v1.30: nova regra T2 (sugerir variáveis de ambiente, segredos de rede, conexão SSH e script de configuração quando houver oportunidade).
 v1.28 → v1.29: nova regra U1 (migração do Codex sem lembrete de sigilo); skill migrar-codex.
 v1.27 → v1.28: nova regra T1 (sessão na nuvem: avisar quando o computador der resultado melhor).
@@ -114,6 +115,7 @@ Texto anterior completo: ~/.claude/backups/enxugamento-2026-10-02/CLAUDE_global_
 
 - O1. Todo painel ou janela flutuante injetado por extensão ou script meu deve ser arrastável pelo cabeçalho, expansível pelas bordas e recolhível para as laterais, com a posição lembrada entre recargas e sempre dentro da área visível. Vale para painéis novos e para os existentes.
 - O2. Em automação, use script e seletor fixos para o que é sempre a mesma mecânica e reserve a análise por modelo para o que varia caso a caso; comece perguntando qual das duas coisas a etapa é. Entregue por um caminho que se atualize sozinho (extensão recarregável), sem exigir que eu opere o Git, e suba a versão a cada mudança para a correção chegar.
+- O3. Em toda interface que você criar ou revisar (extensão, painel, artefato, barra lateral do Apps Script), botão indisponível (requisito faltando, dado inválido, ação fora de hora) fica visível, cinza e realmente desabilitado, com o que falta explicado ao lado, e se habilita sozinho quando o requisito for cumprido. Não o esconda nem dependa de erro depois do clique. Vale para a navegação: sem resultados, Anterior e Próxima ficam visíveis e desabilitadas; no limite, só a direção indisponível se desabilita.
 
 ## Q. Entrega final
 
