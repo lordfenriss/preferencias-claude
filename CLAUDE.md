@@ -1,9 +1,9 @@
 # Preferências gerais
 
-**Versão 1.33 · 20/10/2026**
+**Versão 1.32 · 20/10/2026**
 
 <!-- Registros antigos (comentário de bloco: o Claude Code não o carrega no contexto).
-v1.32 → v1.33: V1 passa a pedir o máximo de elementos visuais e a animação, quando liberada, em todos os projetos.
+v1.31 → v1.32: V1 passa a pedir o máximo de elementos visuais e a animação, quando liberada, em todos os projetos.
 v1.30 → v1.31: nova regra O3 (botões e navegação indisponíveis ficam visíveis, cinza e desabilitados, com o requisito explicado).
 v1.29 → v1.30: nova regra T2 (sugerir variáveis de ambiente, segredos de rede, conexão SSH e script de configuração quando houver oportunidade).
 v1.28 → v1.29: nova regra U1 (migração do Codex sem lembrete de sigilo); skill migrar-codex.
