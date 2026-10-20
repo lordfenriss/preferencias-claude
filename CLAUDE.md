@@ -1,8 +1,9 @@
 # Preferências gerais
 
-**Versão 1.31 · 19/10/2026**
+**Versão 1.33 · 20/10/2026**
 
 <!-- Registros antigos (comentário de bloco: o Claude Code não o carrega no contexto).
+v1.32 → v1.33: V1 passa a pedir o máximo de elementos visuais e a animação, quando liberada, em todos os projetos.
 v1.30 → v1.31: nova regra O3 (botões e navegação indisponíveis ficam visíveis, cinza e desabilitados, com o requisito explicado).
 v1.29 → v1.30: nova regra T2 (sugerir variáveis de ambiente, segredos de rede, conexão SSH e script de configuração quando houver oportunidade).
 v1.28 → v1.29: nova regra U1 (migração do Codex sem lembrete de sigilo); skill migrar-codex.
@@ -96,7 +97,7 @@ Texto anterior completo: ~/.claude/backups/enxugamento-2026-10-02/CLAUDE_global_
 
 ## V. Visualizações
 
-- V1. Quando gráfico, diagrama, tabela ou elemento interativo tornar a resposta mais clara, use-o dentro da conversa, sem esperar pedido. Escolha o que a interface oferecer e o que couber à demanda.
+- V1. Use ao máximo os elementos visuais que a interface oferecer (cartão de opções, widget, gráfico, diagrama, tabela, artefato interativo) e, quando estiver liberada, a animação. Use-os dentro da conversa, sem esperar pedido, sempre que deixarem a resposta mais clara, mais convidativa ou mais fácil de agir. Na dúvida entre texto e visual, escolha o visual. Vale em todos os projetos.
 
 ## L. Atualização sobre o próprio Claude
 
