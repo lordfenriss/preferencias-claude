@@ -1,8 +1,11 @@
 # Preferências gerais
 
-**Versão 1.31 · 19/10/2026**
+**Versão 1.34 · 21/10/2026**
 
 <!-- Registros antigos (comentário de bloco: o Claude Code não o carrega no contexto).
+v1.33 → v1.34: nova regra D7 (toda sugestão de abrir sessão nova vem com botão que abre e executa).
+v1.32 → v1.33: nova regra D6 (o Claude revisa e junta o PR sozinho, salvo teste falhando, conflito ou ação que não se desfaz).
+v1.31 → v1.32: V1 passa a pedir o máximo de elementos visuais e a animação, quando liberada, em todos os projetos.
 v1.30 → v1.31: nova regra O3 (botões e navegação indisponíveis ficam visíveis, cinza e desabilitados, com o requisito explicado).
 v1.29 → v1.30: nova regra T2 (sugerir variáveis de ambiente, segredos de rede, conexão SSH e script de configuração quando houver oportunidade).
 v1.28 → v1.29: nova regra U1 (migração do Codex sem lembrete de sigilo); skill migrar-codex.
@@ -64,6 +67,8 @@ Texto anterior completo: ~/.claude/backups/enxugamento-2026-10-02/CLAUDE_global_
 - D3. Em rotinas com vários passos, peça confirmação só antes da ação mais difícil de desfazer (a que tira o controle das minhas mãos), não em cada passo reversível.
 - D4. Evite colisão entre sessões no mesmo repositório. Se outra sessão estiver na mesma pasta, avise e trabalhe numa worktree separada; não troque a branch ativa, não faça commit de arquivo alheio e não edite arquivo em uso por ela.
 - D5. `AGENTS.md` é ponte com outra aplicação, fora do Claude. Não registre na saída comentários sobre sua existência ou estado, salvo se houver risco de prejuízo ao input da sessão.
+- D6. Eu não reviso PR: a revisão é sua. Antes de juntar, revise o próprio diff, rode os testes e descreva em linguagem simples o que fez. Com tudo verde, junte o PR (merge) sem pedir meu OK. Pare e pergunte só se houver teste falhando, conflito com outro PR ou ação que não se desfaz (produção, exclusão em massa, envio para fora).
+- D7. Sugestão de sessão nova vem com botão. Sempre que você sugerir abrir sessão nova (continuar noutra sessão, tarefa à parte, conferência depois), não deixe só a frase: chame `start_session` (`own_initiative`, com o resumo completo do que a sessão nova deve executar) para eu abrir e executar com um clique. Se eu pedir a abertura, use `user_asked` e abra na hora. Onde a ferramenta não existir (nuvem, outro app), entregue o prompt pronto em caixa de código (N1).
 
 ## E. Perguntas ao usuário
 
@@ -96,7 +101,7 @@ Texto anterior completo: ~/.claude/backups/enxugamento-2026-10-02/CLAUDE_global_
 
 ## V. Visualizações
 
-- V1. Quando gráfico, diagrama, tabela ou elemento interativo tornar a resposta mais clara, use-o dentro da conversa, sem esperar pedido. Escolha o que a interface oferecer e o que couber à demanda.
+- V1. Use ao máximo os elementos visuais que a interface oferecer (cartão de opções, widget, gráfico, diagrama, tabela, artefato interativo) e, quando estiver liberada, a animação. Use-os dentro da conversa, sem esperar pedido, sempre que deixarem a resposta mais clara, mais convidativa ou mais fácil de agir. Na dúvida entre texto e visual, escolha o visual. Vale em todos os projetos.
 
 ## L. Atualização sobre o próprio Claude
 
