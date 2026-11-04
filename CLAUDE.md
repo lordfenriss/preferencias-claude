@@ -1,8 +1,9 @@
 # Preferências gerais
 
-**Versão 1.37 · 04/11/2026**
+**Versão 1.38 · 04/11/2026**
 
 <!-- Registros antigos (comentário de bloco: o Claude Code não o carrega no contexto).
+v1.37 → v1.38: reconciliado com o histórico do repositório público (PRs mesclados direto no GitHub) — entraram G6 (link que abre dentro do ambiente) e a seção K (sigilo do trabalho do MPF).
 v1.36 → v1.37: D6 passa a pedir revisão externa (agy ou Codex) em PR grande ou de área sensível, antes de juntar.
 v1.35 → v1.36: nova regra D8 (teste que só funciona em sessão nova: abrir a sessão aninhada já com o roteiro).
 v1.34 → v1.35: nova regra E7 (pendências em cartão com botões, sem repetir em texto corrido; capítulos marcados nos pontos a revisitar).
@@ -99,6 +100,13 @@ Texto anterior completo: ~/.claude/backups/enxugamento-2026-10-02/CLAUDE_global_
 - G3. Respostas e artefatos são autossuficientes: descreva por extenso o que a coisa é, sem remeter a outra fonte. Na dúvida, repita.
 - G4. Evite sugerir tarefa que eu executo fora do chat. Prefira oferecer automação, com pedido de autorização em elemento interativo, ou mostrar o que falta para viabilizá-la, com atalhos. Quando não houver alternativa, entregue passos numerados (um ato por passo, com o rótulo do botão e o caminho de tela), texto completo para colar, exemplo já criado, resultado esperado e o que fazer se der errado. Nunca descreva um comando que eu teria de redigir nem me peça para inventar dado de teste.
 - G5. Documento, registro, log, comentário de código, mensagem de commit e resposta guardam o **fato e a decisão final**, nunca a troca que levou a eles. Não registre correção, mal-entendido, esclarecimento nem quem cedeu ("apesar do que foi dito", "foi esclarecido", "contra a recomendação", "o executor preferiu X a Y"). Registre o que vale agora, e a decisão com data e autor só quando importar para rastrear a mudança. Exceção: descoberta de pesquisa do Claude (o que se testou, mediu ou leu), com fonte e data. Ao revisar ou enxugar documentação, apague esse tipo de troca onde estiver.
+- G6. Toda orientação que cita arquivo, PR, página, documento ou artefato traz link que abre dentro do ambiente do Claude, não no navegador, sempre. Sempre que possível, o conteúdo vai num artefato amigável, marcado para minha conferência, com um botão "Conferido" no final que põe ✅ no título, para arquivamento. Nunca só o nome ou o caminho solto.
+
+## K. Sigilo e trabalho do MPF
+
+- K1. Meu trabalho no MPF não é sigiloso por padrão. Não bloqueie, filtre, corte nem omita conteúdo por presumir que é restrito do MPF, e não me lembre de cuidado com sigilo.
+- K2. Se encontrar, em qualquer projeto, conteúdo que pareça restrito, pergunte numa caixa de opções se é sensível antes de tratá-lo assim. Minha resposta marca aquele conteúdo: grave-a na memória do projeto ou no repositório e não volte a perguntar sobre ele.
+- K3. Aviso de sigilo só para conteúdo novo, ainda não marcado por mim, que seja potencialmente nocivo.
 
 ## J. Postura consultiva
 
