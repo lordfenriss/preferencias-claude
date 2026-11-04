@@ -1,8 +1,11 @@
 # Preferências gerais
 
-**Versão 1.34 · 21/10/2026**
+**Versão 1.37 · 04/11/2026**
 
 <!-- Registros antigos (comentário de bloco: o Claude Code não o carrega no contexto).
+v1.36 → v1.37: D6 passa a pedir revisão externa (agy ou Codex) em PR grande ou de área sensível, antes de juntar.
+v1.35 → v1.36: nova regra D8 (teste que só funciona em sessão nova: abrir a sessão aninhada já com o roteiro).
+v1.34 → v1.35: nova regra E7 (pendências em cartão com botões, sem repetir em texto corrido; capítulos marcados nos pontos a revisitar).
 v1.33 → v1.34: nova regra D7 (toda sugestão de abrir sessão nova vem com botão que abre e executa).
 v1.32 → v1.33: nova regra D6 (o Claude revisa e junta o PR sozinho, salvo teste falhando, conflito ou ação que não se desfaz).
 v1.31 → v1.32: V1 passa a pedir o máximo de elementos visuais e a animação, quando liberada, em todos os projetos.
@@ -67,8 +70,9 @@ Texto anterior completo: ~/.claude/backups/enxugamento-2026-10-02/CLAUDE_global_
 - D3. Em rotinas com vários passos, peça confirmação só antes da ação mais difícil de desfazer (a que tira o controle das minhas mãos), não em cada passo reversível.
 - D4. Evite colisão entre sessões no mesmo repositório. Se outra sessão estiver na mesma pasta, avise e trabalhe numa worktree separada; não troque a branch ativa, não faça commit de arquivo alheio e não edite arquivo em uso por ela.
 - D5. `AGENTS.md` é ponte com outra aplicação, fora do Claude. Não registre na saída comentários sobre sua existência ou estado, salvo se houver risco de prejuízo ao input da sessão.
-- D6. Eu não reviso PR: a revisão é sua. Antes de juntar, revise o próprio diff, rode os testes e descreva em linguagem simples o que fez. Com tudo verde, junte o PR (merge) sem pedir meu OK. Pare e pergunte só se houver teste falhando, conflito com outro PR ou ação que não se desfaz (produção, exclusão em massa, envio para fora).
+- D6. Eu não reviso PR: a revisão é sua. Antes de juntar, revise o próprio diff, rode os testes e descreva em linguagem simples o que fez. Com tudo verde, junte o PR (merge) sem pedir meu OK. Pare e pergunte só se houver teste falhando, conflito com outro PR ou ação que não se desfaz (produção, exclusão em massa, envio para fora). Em PR com mudança em vários arquivos ou em área sensível (dados, autenticação, envio para fora, produção), peça antes revisão externa do diff a `/agy:reviewer` ou `/codex:review` (gasta o limite deles, não o do Claude), confira o resultado por `git diff` e trate os achados; dispense em mudança trivial. Não confie no "resumo operacional" que o agy escreve.
 - D7. Sugestão de sessão nova vem com botão. Sempre que você sugerir abrir sessão nova (continuar noutra sessão, tarefa à parte, conferência depois), não deixe só a frase: chame `start_session` (`own_initiative`, com o resumo completo do que a sessão nova deve executar) para eu abrir e executar com um clique. Se eu pedir a abertura, use `user_asked` e abra na hora. Onde a ferramenta não existir (nuvem, outro app), entregue o prompt pronto em caixa de código (N1).
+- D8. Teste que só roda em sessão nova. Sempre que sua saída disser que algo só pode ser testado ou só passa a valer numa sessão nova (plugin, hook, skill, MCP, configuração ou extensão recém-instalados que a sessão atual não carrega), não deixe a instrução para mim: abra você a sessão aninhada com `start_session` (`user_asked` se eu pedi o teste; `own_initiative` se foi sugestão sua), com o roteiro de teste completo (o que executar, o resultado esperado e como reportar Passou, Falhou ou Não testei, conforme E3) e a pasta de trabalho atual. Traga o resultado de volta à sessão de origem. Onde a ferramenta não existir, aplique o final de D7.
 
 ## E. Perguntas ao usuário
 
@@ -82,6 +86,7 @@ Texto anterior completo: ~/.claude/backups/enxugamento-2026-10-02/CLAUDE_global_
 - E3. Roteiro de conferência. Quando o andamento depende de input ou feedback do usuário (algo para testar ou conferir), o roteiro fica dentro da conversa, em elementos interativos (E1), ou em artefato interativo (E6) quando o esforço for maior. Cada checagem tem as opções Passou, Falhou e Não testei, com o que olhar e o resultado esperado. Use o máximo de elementos intuitivos e eficientes. Falhas e observações viram pendência a investigar na mesma sessão; "Não testei" fica registrado como pendente.
 - E4. Aviso com baixa. Todo aviso que eu só precise tomar conhecimento, ou autorização simples, vai acompanhado de elemento interativo ao lado da frase para resposta ágil (botão, tick, check ou a visualização apropriada à demanda). "Ciente" dá baixa: não repita o aviso no restante da sessão, salvo se a situação mudar. Junte os avisos do mesmo turno no mesmo elemento.
 - E6. Arquivos gerados são registro para uso do Claude. O que precisa de atenção, conferência, decisão ou ação do usuário é apresentado dentro da conversa, em artefato interativo ou elemento interativo. Se nenhum estiver disponível ou for apropriado, use caixa de pergunta. Nunca mande o usuário a uma seção de arquivo. Cada item traz o que olhar, onde clicar, o resultado esperado e o que fazer se falhar (G4).
+- E7. Pendências e capítulos. Ao criar algo que fica para eu revisitar (elemento interativo sem resposta, arquivo ou artefato reutilizável, visual ou demonstração útil de rever, ação que não se desfaz, mudança de fase), marque um capítulo (`mark_chapter`) no mesmo turno, com título curto e de tipo claro. Não marque pergunta respondida nem arquivo de trabalho. Pendência aparece como cartão com botões Resolver, Adiar e Deixar assim, não em texto corrido. Nas respostas seguintes, cite a pendência só pelo nome do capítulo ("pendente em: <título>") e só quando ela mudar, bloquear o passo atual ou eu perguntar "o que falta". Depois de Adiar ou Deixar assim, não repita na sessão. A lista completa sai uma vez, no /encerrar.
 
 ## F. Perfil do usuário
 
