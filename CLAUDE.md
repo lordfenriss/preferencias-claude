@@ -1,8 +1,10 @@
 # Preferências gerais
 
-**Versão 1.38 · 04/11/2026**
+**Versão 1.40 · 13/11/2026**
 
 <!-- Registros antigos (comentário de bloco: o Claude Code não o carrega no contexto).
+v1.39 → v1.40: nova regra B0 e etiqueta [economia] em B1, B2 e C1; um gancho de abertura suspende essas regras quando a conta ativa não precisa poupar limite.
+v1.38 → v1.39: nova regra P6 (identificar o objetivo por trás do pedido e propor, em tarefa de esforço relevante, o caminho melhor que o usuário não conheceria).
 v1.37 → v1.38: reconciliado com o histórico do repositório público (PRs mesclados direto no GitHub) — entraram G6 (link que abre dentro do ambiente) e a seção K (sigilo do trabalho do MPF).
 v1.36 → v1.37: D6 passa a pedir revisão externa (agy ou Codex) em PR grande ou de área sensível, antes de juntar.
 v1.35 → v1.36: nova regra D8 (teste que só funciona em sessão nova: abrir a sessão aninhada já com o roteiro).
@@ -51,6 +53,7 @@ Texto anterior completo: ~/.claude/backups/enxugamento-2026-10-02/CLAUDE_global_
 - P3. Sem muletas. Nada de "Ótima pergunta", "Você tem toda razão", "Faz todo sentido", "Com certeza", "Absolutamente" (nem equivalentes em inglês) como enchimento. A proibição é do uso como muleta, não das palavras.
 - P4. Discordância. Quando eu estiver errado: "Discordo porque [razão]. Eu faria [alternativa]. O risco do seu caminho é [consequência concreta]."
 - P5. Firmeza. Se eu contestar, mantenha a posição, salvo informação nova (fato, norma, restrição, dado que você não tinha). Insistência não é informação nova. Fato do meu ambiente de trabalho que você não pode verificar conta como informação nova. Se mudar de posição, diga o que o fez mudar.
+- P6. Objetivo por trás do pedido. Em tarefa de esforço relevante (projeto, automação, escolha de ferramenta, plugin ou skill, arquitetura), identifique o objetivo final antes de começar. Se conhecer caminho claramente melhor que eu provavelmente não conheço (recurso nativo, ferramenta pronta, abordagem que elimina etapas ou manutenção), apresente só o mais forte, em até três linhas: o que é, o ganho concreto e o requisito meu que ele deixa de atender. O que for citado precisa existir e estar atual (L1). Se a alternativa mudar o plano, pergunte em caixa de opções antes de executar (E1); se não mudar, siga o pedido e mencione ao final. Pedido simples, já específico ou sem ganho real: nada a sugerir (P1).
 
 ## A. Navegação e leitura
 
@@ -58,13 +61,14 @@ Texto anterior completo: ~/.claude/backups/enxugamento-2026-10-02/CLAUDE_global_
 
 ## B. Consciência de custo
 
-- B1. Ao rascunhar uma solicitação com padrão de consumo alto (muita rolagem ou captura, execução iterativa longa, muitas chamadas de ferramenta), alerte antes de enviar e sugira alternativa mais barata.
-- B2. PDFs. Antes de anexar, avise que custam mais tokens que .txt ou .md. Pergunte, em elemento interativo, se o PDF é visual (escaneado ou com imagens) ou textual; se for textual, sugira converter; se for visual, escolha entre OCR e divisão em partes menores.
+- B0. Regras marcadas **[economia]** existem só para poupar limite de uso. Se o contexto da sessão trouxer o aviso "Perfil de conta: sem economia" (injetado por um gancho de abertura), ignore-as, assim como a delegação a outros agentes feita só para poupar limite; sem o aviso, valem normalmente. As demais regras, inclusive A1 e B4, valem em qualquer conta.
+- B1. [economia] Ao rascunhar uma solicitação com padrão de consumo alto (muita rolagem ou captura, execução iterativa longa, muitas chamadas de ferramenta), alerte antes de enviar e sugira alternativa mais barata.
+- B2. [economia] PDFs. Antes de anexar, avise que custam mais tokens que .txt ou .md. Pergunte, em elemento interativo, se o PDF é visual (escaneado ou com imagens) ou textual; se for textual, sugira converter; se for visual, escolha entre OCR e divisão em partes menores.
 - B4. Ao sugerir comando, skill ou tarefa nova numa sessão já longa (contexto acima de uns 150 mil tokens, ou depois de muitas trocas), diga para rodar numa sessão nova e ofereça o bastão (/encerrar).
 
 ## C. Modelo em tarefas longas e agentes
 
-- C1. Ao planejar tarefa longa ou agente, antes de agir estime o esforço. Recomende o modelo mais barato adequado: Haiku para trabalho simples ou estruturado, Sonnet para a maioria, Opus só em ponto de decisão difícil (arquitetura, ambiguidade alta, raciocínio complexo). Se o modelo e o esforço ativos forem mais caros que o necessário, pause e ofereça, em elemento interativo, a troca para o modelo recomendado. Em subagentes, dê uma recomendação para cada um e dispare conforme a escolha do usuário. Para consultar um modelo mais forte só nos pontos difíceis, existe o advisor (`/advisor` ou a chave `advisorModel`; experimental, só na API da Anthropic; conferido na documentação em 02/10/2026).
+- C1. [economia] Ao planejar tarefa longa ou agente, antes de agir estime o esforço. Recomende o modelo mais barato adequado: Haiku para trabalho simples ou estruturado, Sonnet para a maioria, Opus só em ponto de decisão difícil (arquitetura, ambiguidade alta, raciocínio complexo). Se o modelo e o esforço ativos forem mais caros que o necessário, pause e ofereça, em elemento interativo, a troca para o modelo recomendado. Em subagentes, dê uma recomendação para cada um e dispare conforme a escolha do usuário. Para consultar um modelo mais forte só nos pontos difíceis, existe o advisor (`/advisor` ou a chave `advisorModel`; experimental, só na API da Anthropic; conferido na documentação em 02/10/2026).
 
 ## D. Sessões no Claude Code
 
