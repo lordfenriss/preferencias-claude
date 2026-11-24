@@ -1,15 +1,27 @@
-# sincronizar.ps1 - v1.0 - 24/11/2026
-# Traz o CLAUDE.md deste repositorio para ~/.claude/CLAUDE.md sem apagar edicao local
-# (mesclagem em tres vias) e confere se o curl precisa de ajuste em rede que inspeciona HTTPS.
+# sincronizar.ps1 - v1.1 - 24/11/2026
+# Mudancas: 1.1 - instala e atualiza as skills do claude-mods (vinculos em ~/.claude/skills para um
+#   clone proprio), sem apagar edicao local. Clone e fetch com limite de tempo (-LimiteRede, 180 s);
+#   o teste do curl roda antes das skills.
+#
+# Traz o CLAUDE.md deste repositorio para ~/.claude/CLAUDE.md sem apagar edicao local (mesclagem em
+# tres vias), mantem as skills do repositorio privado claude-mods e confere se o curl precisa de ajuste
+# em rede que inspeciona HTTPS.
 #
 # Uso (PowerShell):
-#   powershell -NoProfile -ExecutionPolicy Bypass -File sincronizar.ps1                  sincroniza e confere o curl
+#   powershell -NoProfile -ExecutionPolicy Bypass -File sincronizar.ps1                  preferencias, skills e curl
 #   powershell -NoProfile -ExecutionPolicy Bypass -File sincronizar.ps1 -Registrar       idem e agenda a execucao diaria
-#   powershell -NoProfile -ExecutionPolicy Bypass -File sincronizar.ps1 -SoPreferencias  sem o curl (usado por publicar.sh)
+#   powershell -NoProfile -ExecutionPolicy Bypass -File sincronizar.ps1 -SoPreferencias  so o CLAUDE.md (usado por publicar.sh)
 # Saida: 0 = ok; 1 = erro (nada alterado); 2 = precisa de decisao (nada alterado); 3 = outra execucao em andamento.
 # Registro: %LOCALAPPDATA%\preferencias-claude\sincronizar.log
+#
+# Skills: cada skill do claude-mods vira, em ~/.claude/skills, um vinculo (junction) para a pasta dela
+# num clone proprio em %LOCALAPPDATA%\preferencias-claude\claude-mods, atualizado com git pull --ff-only
+# (o Git recusa a atualizacao se ela tocar arquivo editado aqui). Copia solta so vira vinculo se for
+# identica a uma versao publicada; a anterior fica em skills-anteriores\. Nomes que esta maquina nao
+# recebe: skills-fora.txt, um por linha. Maquina com o clone de trabalho em ~/.claudecode/mods (a
+# principal, vinculos do checar-skills) fica de fora.
 
-param([switch]$Registrar, [switch]$SoPreferencias)
+param([switch]$Registrar, [switch]$SoPreferencias, [int]$LimiteRede = 180)
 
 $ErrorActionPreference = 'Continue'
 $repo   = $PSScriptRoot
@@ -20,11 +32,20 @@ $local  = Join-Path $env:USERPROFILE '.claude\CLAUDE.md'
 $remoto = Join-Path $repo 'CLAUDE.md'
 $tarefa = 'Claude - sincronizar preferencias'
 $utf8   = New-Object System.Text.UTF8Encoding($false)
+$modsUrl    = 'https://github.com/lordfenriss/claude-mods.git'
+$padraoFora = @('acesso-remoto-casa', 'ideia', 'migrar-codex', 'orquestrar')   # dependem do PC de casa, do ai-memory ou dos scripts codex-casa/agy-casa
+$clone      = Join-Path $estado 'claude-mods'
+$origem     = Join-Path $clone 'skills'
+$foraf      = Join-Path $estado 'skills-fora.txt'
+$destSkills = Join-Path $env:USERPROFILE '.claude\skills'
+$trabalho   = Join-Path $env:USERPROFILE '.claudecode\mods'
 New-Item -ItemType Directory -Force -Path $estado | Out-Null
 
 function Write-Registro([string]$m) {
     $linha = "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') $m"
-    Add-Content -Path $logf -Value $linha -Encoding UTF8
+    for ($i = 0; $i -lt 3; $i++) {   # o arquivo pode ficar preso por instantes (antivirus)
+        try { Add-Content -Path $logf -Value $linha -Encoding UTF8 -ErrorAction Stop; break } catch { Start-Sleep -Milliseconds 300 }
+    }
     Write-Host $linha
 }
 function Read-Texto($f) {
@@ -110,6 +131,174 @@ function Sync-Preferencias {
     } finally { Remove-Item $w, $b, $r -Force -ErrorAction SilentlyContinue }
 }
 
+# ---------- Skills do claude-mods ----------
+
+function Get-Entrada($p) {
+    $i = Get-Item -LiteralPath $p -Force -ErrorAction SilentlyContinue
+    if (-not $i) { return $null }
+    $link = [bool]($i.Attributes -band [IO.FileAttributes]::ReparsePoint)
+    $alvo = $null
+    if ($link) { $alvo = @($i.Target)[0] }
+    return [pscustomobject]@{ Item = $i; Link = $link; Alvo = $alvo }
+}
+function Test-MesmoCaminho($a, $b) {
+    if (-not $a -or -not $b) { return $false }
+    $a = $a -replace '^\\\\\?\\', ''
+    return ([IO.Path]::GetFullPath($a).TrimEnd('\') -ieq [IO.Path]::GetFullPath($b).TrimEnd('\'))
+}
+# git com limite de tempo (a tarefa agendada morre em 10 min e o curl vem depois); mata a arvore de processos ao estourar.
+function Invoke-GitLimitado([string[]]$argumentos, [int]$segundos) {
+    $of = New-Temporario 'git-out.txt'; $ef = New-Temporario 'git-err.txt'
+    try {
+        $texto = ($argumentos | ForEach-Object { '"' + ($_ -replace '"', '\"') + '"' }) -join ' '
+        $p = Start-Process -FilePath 'git' -ArgumentList $texto -NoNewWindow -PassThru -RedirectStandardOutput $of -RedirectStandardError $ef -ErrorAction Stop
+        $null = $p.Handle   # sem isto, no PowerShell 5.1, ExitCode volta nulo depois de WaitForExit com tempo
+        if (-not $p.WaitForExit($segundos * 1000)) {
+            & taskkill.exe /T /F /PID $p.Id 2>&1 | Out-Null
+            return [pscustomobject]@{ Codigo = -1; Saida = "tempo esgotado ($segundos s)" }
+        }
+        $p.WaitForExit()
+        return [pscustomobject]@{ Codigo = $p.ExitCode; Saida = ((Get-Content $of, $ef -Raw -ErrorAction SilentlyContinue) -join ' ').Trim() }
+    } finally { Remove-Item $of, $ef -Force -ErrorAction SilentlyContinue }
+}
+function Remove-Vinculo($p) {
+    # So o vinculo; a pasta de destino fica intacta.
+    $e = Get-Entrada $p
+    if (-not $e -or -not $e.Link) { throw "$p nao e vinculo; nada removido" }
+    [IO.Directory]::Delete($p, $false)
+}
+function Get-SkillsFora {
+    if (-not (Test-Path $foraf)) {
+        Write-Texto $foraf ("# Skills do claude-mods que esta maquina nao recebe: um nome por linha (# comeca comentario).`n" +
+            "# Por um nome aqui tira o vinculo na proxima sincronizacao; tirar o nome instala a skill.`n" +
+            (($padraoFora -join "`n") + "`n"))
+    }
+    return @((Read-Texto $foraf) -split "`n" | ForEach-Object { ($_ -replace '#.*$', '').Trim() } | Where-Object { $_ })
+}
+function Format-Assinatura($linhas) {
+    $a = [string[]]@($linhas)
+    [Array]::Sort($a, [StringComparer]::Ordinal)
+    return ($a -join "`n")
+}
+# A pasta solta em ~/.claude/skills e identica a alguma versao publicada da skill (mesmos arquivos, mesmo conteudo)?
+function Test-SkillPublicada($pasta, $nome) {
+    $base = $pasta.TrimEnd('\')
+    $locais = New-Object System.Collections.Generic.List[string]
+    foreach ($a in @(Get-ChildItem -LiteralPath $base -Recurse -File -Force -ErrorAction Stop)) {
+        $rel = $a.FullName.Substring($base.Length + 1) -replace '\\', '/'
+        if ($rel -match '(^|/)__pycache__/') { continue }   # regeneravel; estado.json local NAO e ignorado (e dado do usuario)
+        $h = & git -C $clone hash-object "--path=skills/$nome/$rel" -- $a.FullName
+        if ($LASTEXITCODE -ne 0 -or -not $h) { return $false }
+        $locais.Add("$rel $("$h".Trim())")
+    }
+    $assinatura = Format-Assinatura $locais.ToArray()
+    $prefixo = "skills/$nome/"
+    # So o historico remoto (origin) comprova publicacao; branch local do clone nao conta.
+    foreach ($c in @(& git -C $clone rev-list --remotes=origin -- "skills/$nome")) {
+        $versao = foreach ($x in @(& git -c core.quotepath=off -C $clone ls-tree -r $c -- $prefixo)) {
+            $meta, $caminho = $x -split "`t", 2
+            "$($caminho.Substring($prefixo.Length)) $(($meta -split ' ')[2])"
+        }
+        if ((Format-Assinatura $versao) -ceq $assinatura) { return $true }
+    }
+    return $false
+}
+
+function Sync-Skills {
+    if ((Test-Path (Join-Path $trabalho 'skills')) -and (Test-Path (Join-Path $trabalho '.git'))) {
+        Write-Registro 'skills: esta maquina usa o clone de trabalho em ~/.claudecode/mods (vinculos do checar-skills); nada a fazer.'
+        return 0
+    }
+    if (-not (Get-Command git -ErrorAction SilentlyContinue)) { Write-Registro 'ERRO: git nao encontrado; skills nao sincronizadas.'; return 1 }
+    # Na execucao agendada o Git nao pode abrir janela de login (ficaria esperando); com -Registrar pode.
+    if (-not $Registrar) { $env:GCM_INTERACTIVE = 'never'; $env:GIT_TERMINAL_PROMPT = '0' }
+    try { [Console]::OutputEncoding = $utf8 } catch { }
+
+    if (-not (Test-Path (Join-Path $clone '.git'))) {
+        $g = Invoke-GitLimitado @('clone', '-q', $modsUrl, $clone) $LimiteRede
+        if ($g.Codigo -ne 0) {
+            Write-Registro "ERRO: clone do claude-mods falhou (repositorio privado: falta o login do GitHub nesta maquina?); skills nao sincronizadas. $($g.Saida)"
+            return 1
+        }
+    } else {
+        $g = Invoke-GitLimitado @('-C', $clone, 'fetch', '-q') $LimiteRede
+        if ($g.Codigo -ne 0) { Write-Registro "ERRO: git fetch do claude-mods falhou; skills nao alteradas. $($g.Saida)"; return 1 }
+        # --no-autostash e --no-overwrite-ignore: nem configuracao herdada nem arquivo ignorado localmente furam a recusa.
+        $g = Invoke-GitLimitado @('-C', $clone, 'merge', '-q', '--ff-only', '--no-autostash', '--no-overwrite-ignore', '@{u}') 60
+        if ($g.Codigo -ne 0) {
+            $editados = @(& git -C $clone status --porcelain) -join '; '
+            $detalhe = ($g.Saida -replace '\s+', ' ').Trim()
+            if ($detalhe.Length -gt 400) { $detalhe = $detalhe.Substring(0, 400) + '...' }
+            Write-Registro ("DECISAO: a atualizacao do claude-mods toca skill editada aqui (ou o clone tem commit que nao esta no GitHub); " +
+                "skills nao alteradas. Editados: $editados. Git: $detalhe Publique a edicao no claude-mods (ou peca ao Claude) e rode de novo. Clone: $clone")
+            return 2
+        }
+    }
+    $versao = "$(& git -C $clone rev-parse --short HEAD)".Trim()
+    if (-not (Test-Path $origem)) { Write-Registro "ERRO: pasta skills nao encontrada em $clone."; return 1 }
+    New-Item -ItemType Directory -Force -Path $destSkills | Out-Null
+
+    $fora = Get-SkillsFora
+    $nomes = @(Get-ChildItem -LiteralPath $origem -Directory | Where-Object { Test-Path (Join-Path $_.FullName 'SKILL.md') } |
+               ForEach-Object { $_.Name })
+    $novas = @(); $trocadas = @(); $removidas = @(); $mantidas = @(); $outras = @(); $ativas = 0
+    $guarda = Join-Path $estado ('skills-anteriores\' + (Get-Date -Format 'yyyyMMdd-HHmmss'))
+    $codigo = 0
+
+    foreach ($n in $nomes) {
+        $dest = Join-Path $destSkills $n
+        $alvo = Join-Path $origem $n
+        try {
+            $e = Get-Entrada $dest
+            if ($fora -contains $n) {
+                if ($e -and $e.Link -and (Test-MesmoCaminho $e.Alvo $alvo)) { Remove-Vinculo $dest; $removidas += "$n (em skills-fora.txt)" }
+                continue
+            }
+            if (-not $e) {
+                New-Item -ItemType Junction -Path $dest -Target $alvo -ErrorAction Stop | Out-Null
+                $novas += $n; $ativas++; continue
+            }
+            if ($e.Link) {
+                if (Test-MesmoCaminho $e.Alvo $alvo) { $ativas++ } else { $outras += $n }
+                continue
+            }
+            if ($e.Item.PSIsContainer -and (Test-SkillPublicada $dest $n)) {
+                New-Item -ItemType Directory -Force -Path $guarda -ErrorAction Stop | Out-Null
+                Move-Item -LiteralPath $dest -Destination (Join-Path $guarda $n) -ErrorAction Stop
+                try { New-Item -ItemType Junction -Path $dest -Target $alvo -ErrorAction Stop | Out-Null }
+                catch { Move-Item -LiteralPath (Join-Path $guarda $n) -Destination $dest -ErrorAction SilentlyContinue; throw }
+                $trocadas += $n; $ativas++; continue
+            }
+            $mantidas += $n
+        } catch { Write-Registro "ERRO: skill $n nao sincronizada: $($_.Exception.Message)"; $codigo = 1 }
+    }
+
+    # Vinculo para skill que saiu do repositorio: aponta para pasta que nao existe mais.
+    foreach ($i in @(Get-ChildItem -LiteralPath $destSkills -Force -ErrorAction SilentlyContinue)) {
+        $e = Get-Entrada $i.FullName
+        if (-not $e -or -not $e.Link -or $nomes -contains $i.Name) { continue }
+        if ((Test-MesmoCaminho $e.Alvo (Join-Path $origem $i.Name)) -and -not (Test-Path -LiteralPath $e.Alvo)) {
+            try { Remove-Vinculo $i.FullName; $removidas += "$($i.Name) (saiu do claude-mods)" }
+            catch { Write-Registro "ERRO: vinculo $($i.Name) nao removido: $($_.Exception.Message)"; $codigo = 1 }
+        }
+    }
+
+    $msg = "skills: claude-mods em $versao; $ativas vinculadas"
+    if ($novas)     { $msg += "; novas: $($novas -join ', ')" }
+    if ($trocadas)  { $msg += "; copias soltas trocadas por vinculo (anteriores em $guarda): $($trocadas -join ', ')" }
+    if ($removidas) { $msg += "; removidas: $($removidas -join ', ')" }
+    if ($outras)    { $msg += "; vinculadas a outra pasta, mantidas: $($outras -join ', ')" }
+    Write-Registro "$msg."
+    $editados = @(& git -C $clone status --porcelain -- skills)
+    if ($editados) { Write-Registro "skills: edicao local ainda nao publicada no claude-mods: $($editados -join '; ')" }
+    if ($mantidas) {
+        Write-Registro ("DECISAO: skill(s) com edicao local que nao veio do claude-mods, mantidas sem atualizacao: $($mantidas -join ', '). " +
+            "Para receber o repositorio, publique a edicao no claude-mods ou mova a pasta; para nao receber, ponha o nome em $foraf.")
+        if ($codigo -eq 0) { $codigo = 2 }
+    }
+    return $codigo
+}
+
 # Em rede que inspeciona HTTPS com certificado sem endereco de revogacao, o curl do Windows
 # (Schannel) recusa os sites; best-effort segue recusando certificado comprovadamente revogado.
 function Test-Curl {
@@ -149,14 +338,18 @@ try {
             $gatilho = New-ScheduledTaskTrigger -Daily -At '09:00'
             $config  = New-ScheduledTaskSettingsSet -StartWhenAvailable -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -ExecutionTimeLimit (New-TimeSpan -Minutes 10)
             Register-ScheduledTask -TaskName $tarefa -Action $acao -Trigger $gatilho -Settings $config `
-                -Description 'Traz o CLAUDE.md do repositorio preferencias-claude e confere o curl.' -Force -ErrorAction Stop | Out-Null
+                -Description 'Traz o CLAUDE.md do repositorio preferencias-claude e as skills do claude-mods e confere o curl.' -Force -ErrorAction Stop | Out-Null
             Get-ScheduledTask -TaskName $tarefa -ErrorAction Stop | Out-Null
             Write-Registro 'Tarefa agendada registrada: diaria as 09:00 (roda depois, se o computador estava desligado).'
         } catch { Write-Registro "ERRO: tarefa agendada nao registrada: $($_.Exception.Message)"; $codigo = 1 }
     }
     try { $s = Sync-Preferencias } catch { Write-Registro "ERRO: $($_.Exception.Message)"; $s = 1 }
     if ($s -gt $codigo) { $codigo = $s }
-    if (-not $SoPreferencias) { Test-Curl }
+    if (-not $SoPreferencias) {
+        Test-Curl
+        try { $s = Sync-Skills } catch { Write-Registro "ERRO: skills: $($_.Exception.Message)"; $s = 1 }
+        if ($s -gt $codigo) { $codigo = $s }
+    }
 } finally {
     $trava.Close()
 }
