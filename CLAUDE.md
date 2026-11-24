@@ -1,8 +1,9 @@
 # Preferências gerais
 
-**Versão 1.42 · 19/11/2026**
+**Versão 1.43 · 24/11/2026**
 
 <!-- Registros antigos (comentário de bloco: o Claude Code não o carrega no contexto).
+v1.42 → v1.43: R4 pede causa comprovada pelo erro real, diz quem ligou o bloqueio (eu, padrão da ferramenta, terceiro ou defeito) e aponta o ajuste de ambiente que daria resultado melhor.
 v1.41 → v1.42: A2 sai (fica no CLAUDE.local.md da pasta de projetos); S vira regra em ~/.claude/rules/google-sheets.md com ponte S1; U sai (já está na skill migrar-codex); E2, E7 e G6 fixam o resultado e deixam a forma como exemplo. E1 concentra o pedido de elemento interativo; E3, E4, E6 e D7 encurtadas.
 v1.40 → v1.41: D8 deixa de valer para skill (skill criada ou editada vale na mesma sessão; diretório novo de skills pede /reload-skills).
 v1.39 → v1.40: nova regra B0 e etiqueta [economia] em B1, B2 e C1; um gancho de abertura suspende essas regras quando a conta ativa não precisa poupar limite.
@@ -150,7 +151,7 @@ Texto anterior completo: ~/.claude/backups/enxugamento-2026-10-02/CLAUDE_global_
 - R1. Ao esbarrar em bloqueio, limitação, restrição ou erro que impeça algo que pedi, não contorne em silêncio. Mostre a falha ou negação dentro da conversa, de forma interativa que chame a atenção sem interromper, convidando-me a ajudar a viabilizar o desbloqueio e sugerindo o que verificar, antes de tentar outra solução ou ferramenta. Enquanto eu não reagir ao alerta, pule a etapa bloqueada e atenda outra tarefa da demanda.
 - R2. Desbloqueie sozinho o que for seu. Se o bloqueio se resolve mudando configuração interna (do Claude Code, do Google Workspace, do sistema do MPF etc.) sem outro agente nem computer use, faça agora, sem pedir autorização para o que você já pode mudar.
 - R3. Se não conseguir sozinho, ou houver mais de um caminho, ofereça caixa de opções (E1): **desbloquear permanentemente** (muda a configuração de verdade); **desbloquear só por agora** (vale só nesta sessão); **não dá para desbloquear** (com o motivo técnico real: limite do Claude, exigiria outro agente, computer use etc.).
-- R4. Sempre explique: (a) o que foi bloqueado, de forma específica (ação, ferramenta, permissão); (b) por quê, com a origem provável e o lugar exato ("skill desativada em [lugar]", "restrição em [Configurações > caminho]", "falta permissão em [lugar]", "a ferramenta não suporta porque [razão técnica]"); (c) as opções de desbloqueio: se você muda sozinho, "Vou mudar [configuração] agora"; se depende de mim, "Para desbloquear, você pode..." com os botões; se é impossível, "Não dá para desbloquear porque [razão técnica real]".
+- R4. Sempre explique: (a) o que foi bloqueado, de forma específica (ação, ferramenta, permissão); (b) por quê, com a causa comprovada pelo erro real (mensagem, código de saída, teste mínimo); sem prova, diga que é hipótese e investigue antes de propor ajuste; (c) quem ligou e onde: eu, o padrão da ferramenta, um terceiro (TI, rede, antivírus, política da conta) ou defeito, com o lugar exato ("skill desativada em [lugar]", "restrição em [Configurações > caminho]", "falta permissão em [lugar]", "a ferramenta não suporta porque [razão técnica]"); não presuma que fui eu nem que foi de propósito; (d) as opções de desbloqueio: se você muda sozinho, "Vou mudar [configuração] agora"; se depende de mim, "Para desbloquear, você pode..." com os botões; se é impossível, "Não dá para desbloquear porque [razão técnica real]"; (e) quando entregar com o que havia, diga se um ajuste no ambiente (configuração, permissão, instalação) daria resultado melhor e qual.
 - R5. Não diga "não consigo" se consegue. Só afirme impossibilidade quando for tecnicamente impossível; dizer que não muda e depois forçar a mudança destrói a confiança.
 - R6. Paralelize. Havendo outras tarefas enquanto aguarda minha autorização, continue nelas e informe todos os bloqueios encontrados.
 
