@@ -4,7 +4,8 @@
 
 - **Local:** cópia em `~/.claude/CLAUDE.md` (Windows: `C:\Users\<usuário>\.claude\CLAUDE.md`).
 - **Nuvem:** o script de configuração do ambiente baixa este arquivo (`raw.githubusercontent.com`) ao montar a VM; o cache é refeito a cada ~7 dias.
-- **Publicar mudanças:** editar o arquivo local e rodar `./publicar.sh`. Ele roda antes o `sincronizar.ps1`, que traz e mescla o que mudou aqui (no GitHub ou por outra máquina); só então copia, faz commit e push.
+- **Publicar mudanças:** editar o arquivo local e rodar `./publicar.sh`. Ele roda antes o `sincronizar.ps1`, que traz e mescla o que mudou aqui (no GitHub ou por outra máquina); só então copia (o `CLAUDE.md` e, em `rules/`, as regras sob demanda de `~/.claude/regras-sob-demanda` e `~/.claude/rules`), faz commit e push.
+- **Regras sob demanda:** `rules/nuvem.md` (regras T) não carrega sozinho; a ponte T do `CLAUDE.md` manda a sessão na nuvem lê-lo por `raw.githubusercontent.com/lordfenriss/preferencias-claude/main/rules/nuvem.md`.
 - **Receber mudanças (todas as máquinas Windows):** a tarefa agendada "Claude - sincronizar preferencias" roda `sincronizar.ps1` todo dia às 09:00 (ou na próxima vez que o computador estiver ligado). Ela:
   1. faz `git pull` deste clone;
   2. atualiza `~/.claude/CLAUDE.md` quando só o repositório mudou; mescla em três vias quando os dois mudaram; não toca em nada quando há conflito (deixa a proposta em `%LOCALAPPDATA%\preferencias-claude\CLAUDE.md.conflito`);
